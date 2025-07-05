@@ -1,12 +1,12 @@
 import { Tabs, Redirect } from 'expo-router';
 import { useAuth } from '@/providers/AuthProvider';
 import { useTheme } from '@/contexts/ThemeContext';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Calendar, 
-  FileText, 
-  Settings 
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  FileText,
+  Settings,
 } from 'lucide-react-native';
 
 export default function TabLayout() {
@@ -55,9 +55,7 @@ export default function TabLayout() {
         name="patients"
         options={{
           title: 'Patients',
-          tabBarIcon: ({ size, color }) => (
-            <Users size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <Users size={size} color={color} />,
         }}
       />
       <Tabs.Screen
