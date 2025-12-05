@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = await SecureStorage.getItemAsync('auth_token');
       const userData = await SecureStorage.getItemAsync('user_data');
-      
+
       if (token && userData) {
         const user = JSON.parse(userData);
         setAuthState({
@@ -44,29 +44,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
+      const response = await fetch(
+        'https://patient-dashboard-pro-backend.onrender.com/api/auth/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+      console.log('login res', response);
       const data = await response.json();
 
       if (response.ok && data.success) {
         await SecureStorage.setItemAsync('auth_token', data.token);
-        await SecureStorage.setItemAsync('user_data', JSON.stringify(data.user));
-        
+        await SecureStorage.setItemAsync(
+          'user_data',
+          JSON.stringify(data.user)
+        );
+
         setAuthState({
           user: data.user,
           token: data.token,
           isAuthenticated: true,
         });
-        
+
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('Login error:', error);
@@ -78,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await SecureStorage.deleteItemAsync('auth_token');
       await SecureStorage.deleteItemAsync('user_data');
-      
+
       setAuthState({
         user: null,
         token: null,
@@ -90,12 +96,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{
-      ...authState,
-      login,
-      logout,
-      loading,
-    }}>
+    <AuthContext.Provider
+      value={{
+        ...authState,
+        login,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

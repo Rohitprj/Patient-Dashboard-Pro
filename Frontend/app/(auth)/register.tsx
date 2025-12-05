@@ -16,6 +16,7 @@ import { User, Mail, Lock, UserPlus } from 'lucide-react-native';
 
 export default function RegisterScreen() {
   const [formData, setFormData] = useState({
+    username: 'rohit2001',
     firstName: '',
     lastName: '',
     email: '',
@@ -26,7 +27,12 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
@@ -40,16 +46,21 @@ export default function RegisterScreen() {
       Alert.alert('Error', 'Password must be at least 6 characters');
       return;
     }
-
+    console.log('Form data', formData);
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        'https://patient-dashboard-pro-backend.onrender.com/api/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      console.log('Register :', response);
 
       const data = await response.json();
 
@@ -67,14 +78,11 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
+    <KeyboardAvoidingView
+      style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <LinearGradient
-        colors={['#10B981', '#06B6D4']}
-        style={styles.gradient}
-      >
+      <LinearGradient colors={['#10B981', '#06B6D4']} style={styles.gradient}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.header}>
             <View style={styles.iconContainer}>
@@ -93,7 +101,9 @@ export default function RegisterScreen() {
                   placeholder="First Name"
                   placeholderTextColor="#9CA3AF"
                   value={formData.firstName}
-                  onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, firstName: text })
+                  }
                 />
               </View>
               <View style={[styles.inputContainer, styles.halfWidth]}>
@@ -103,7 +113,9 @@ export default function RegisterScreen() {
                   placeholder="Last Name"
                   placeholderTextColor="#9CA3AF"
                   value={formData.lastName}
-                  onChangeText={(text) => setFormData({ ...formData, lastName: text })}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, lastName: text })
+                  }
                 />
               </View>
             </View>
@@ -115,7 +127,9 @@ export default function RegisterScreen() {
                 placeholder="Email Address"
                 placeholderTextColor="#9CA3AF"
                 value={formData.email}
-                onChangeText={(text) => setFormData({ ...formData, email: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, email: text })
+                }
                 autoCapitalize="none"
                 keyboardType="email-address"
               />
@@ -128,7 +142,9 @@ export default function RegisterScreen() {
                 placeholder="Password"
                 placeholderTextColor="#9CA3AF"
                 value={formData.password}
-                onChangeText={(text) => setFormData({ ...formData, password: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, password: text })
+                }
                 secureTextEntry
               />
             </View>
@@ -140,13 +156,18 @@ export default function RegisterScreen() {
                 placeholder="Confirm Password"
                 placeholderTextColor="#9CA3AF"
                 value={formData.confirmPassword}
-                onChangeText={(text) => setFormData({ ...formData, confirmPassword: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, confirmPassword: text })
+                }
                 secureTextEntry
               />
             </View>
 
             <TouchableOpacity
-              style={[styles.registerButton, loading && styles.registerButtonDisabled]}
+              style={[
+                styles.registerButton,
+                loading && styles.registerButtonDisabled,
+              ]}
               onPress={handleRegister}
               disabled={loading}
             >
