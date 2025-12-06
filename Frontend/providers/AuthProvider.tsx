@@ -54,19 +54,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           body: JSON.stringify({ email, password }),
         }
       );
-      console.log('login res', response);
       const data = await response.json();
+      console.log('login res', JSON.stringify(data, null, 2));
 
       if (response.ok && data.success) {
-        await SecureStorage.setItemAsync('auth_token', data.token);
-        await SecureStorage.setItemAsync(
-          'user_data',
-          JSON.stringify(data.user)
-        );
+        const token = data.data.token;
+        const user = data.data.user;
+
+        await SecureStorage.setItemAsync('auth_token', token);
+        await SecureStorage.setItemAsync('user_data', JSON.stringify(user));
 
         setAuthState({
-          user: data.user,
-          token: data.token,
+          user,
+          token,
           isAuthenticated: true,
         });
 
