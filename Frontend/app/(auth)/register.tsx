@@ -12,11 +12,11 @@ import {
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { User, Mail, Lock, UserPlus } from 'lucide-react-native';
+import { User, Mail, Lock, UserPlus, UserCircle } from 'lucide-react-native';
 
 export default function RegisterScreen() {
   const [formData, setFormData] = useState({
-    username: 'rohit2001',
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -28,6 +28,7 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     if (
+      !formData.username ||
       !formData.firstName ||
       !formData.lastName ||
       !formData.email ||
@@ -120,6 +121,20 @@ export default function RegisterScreen() {
               </View>
             </View>
 
+            <View style={styles.inputContainer}>
+              <UserCircle size={20} color="#6B7280" style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="User Name"
+                placeholderTextColor="#9CA3AF"
+                value={formData.username}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, username: text })
+                }
+                autoCapitalize="none"
+                // keyboardType=''
+              />
+            </View>
             <View style={styles.inputContainer}>
               <Mail size={20} color="#6B7280" style={styles.inputIcon} />
               <TextInput
